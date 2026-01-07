@@ -1,0 +1,12 @@
+﻿Poniższa analiza powstała na podstawie wyników segmentacji martwych drzew wykonanej dla zbioru USA_segmentation.
+
+
+Zastosowano połączenia logiczne na kanałach RGB (R, B), HSV (H) oraz NRD, a maski zostały oczyszczone operacjami morfologicznymi. 
+
+
+Średnie wartości metryk na całym zbiorze:
+iou: 0.1373 - średnio tylko 14% łącznej powierzchni maski GT i maski przewidzianej to część wspólna. To pokazuje, że różnice pomiędzy maską przewidywaną i prawdziwą kształtem, rozmieszczeniem i wielkością są znaczne.
+dice: 0.2745 - niewielkie nakładanie się maski przewidywanej z ground truth - wykrywane obszary są tylko częściowo zgodne z prawdą.
+precision: 0.1760 - ok. 18% wykrytych pikseli faktycznie jest martwymi drzewami.
+Czyli dużo tła jest błędnie oznaczone jako drzewo (FP).
+recall: 0.4221 - model poprawnie odnajduje ok. 42% pikseli, które naprawdę należą do martwych drzew. To oznacza, że prawdziwe drzewa często nie zostają w ogóle wykryte (FN) - strategia jest ostrożna.
