@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# Loads RGB, NIR and mask file paths from the dataset directory and performs sanity checks
 def load_paths():
     project_root = Path(__file__).resolve().parent.parent
     data_dir = project_root / "data" / "USA_segmentation"
