@@ -9,12 +9,14 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 #pre main analysis
 
+# Converts a mask to boolean, handling both 0–1 and 0–255 formats
 def mask_to_bool(mask):
     if mask.max() <= 1.0:
         return mask > 0.5
     else:
         return mask > 128
 
+# Displays NIR, RGB and mask images and saves them into a multipage PDF file
 def display_data(nir_paths, rgb_paths, mask_paths, filename="results/data_display.pdf", num_images=300):
   filename = Path(filename)
   with PdfPages(filename) as pdf:
@@ -46,7 +48,8 @@ def display_data(nir_paths, rgb_paths, mask_paths, filename="results/data_displa
 
         pdf.savefig(fig)
         plt.close(fig)
-    
+
+# Computes means, standard deviations and separation between masked (tree) and background pixels 
 def channel_statistics(channel, mask_bool, name):
     class_tree = channel[mask_bool]
     class_bg = channel[~mask_bool]
@@ -62,7 +65,8 @@ def channel_statistics(channel, mask_bool, name):
     print(f" Dead trees: mean={mean_tree: .2f}, std={std_tree:.2f}")
     print(f" Background: mean={mean_bg:.2f}, std={std_bg:.2f}")
     print(f" Separation: {separation:.4f}")
-    
+
+# Plots pixel value histograms for masked foreground vs background
 def plot_channel_hist(channel, mask_bool, title, pdf=None):
     class_tree = channel[mask_bool]
     class_bg = channel[~mask_bool]
@@ -82,6 +86,7 @@ def plot_channel_hist(channel, mask_bool, title, pdf=None):
     else:
         plt.show()
 
+# Creates histograms for RGB + HSV channels and saves them to a multipage PDF file
 def channel_histograms(rgb_paths, mask_paths, filename="results/channel_histograms.pdf", num_images=300):
     filename = Path(filename)
     with PdfPages(filename) as pdf:
@@ -102,6 +107,7 @@ def channel_histograms(rgb_paths, mask_paths, filename="results/channel_histogra
             for name, ch in channels.items():
                 plot_channel_hist(ch, mask, f"Image {i+1} - {name}", pdf=pdf)
 
+# Finds which channel provides the strongest separation between tree mask and background
 def find_best_channels(rgb_paths, mask_paths, num_images=300):
     channels_names = ["R", "G", "B", "H","S", "V"]
     best_channel_counts = {name:0 for name in channels_names}
@@ -135,6 +141,7 @@ def find_best_channels(rgb_paths, mask_paths, num_images=300):
                 best_channel_counts[name] += 1
     return best_channel_counts
 
+# Plots how many images each channel was the best separator for
 def plot_best_channels(best_channel_counts, filename="results/best_channels.pdf"):
     filename = Path(filename)
     with PdfPages(filename) as pdf:
@@ -153,6 +160,7 @@ def plot_best_channels(best_channel_counts, filename="results/best_channels.pdf"
 
 #post main analysis
 
+# Computes IoU (Intersection over Union) between predicted and ground-truth masks
 def compute_iou(mask_pred, mask_gt, smooth=1e-8):
     mask_pred = mask_pred.astype(bool)
     mask_gt = mask_gt.astype(bool)
@@ -160,6 +168,7 @@ def compute_iou(mask_pred, mask_gt, smooth=1e-8):
     union = np.logical_or(mask_pred, mask_gt).sum()
     return intersection / (union + smooth)
 
+# Builds a confusion matrix: TP, FP, FN, TN
 def confusion_matrix(mask_pred, mask_gt):
     tp = np.logical_and(mask_pred, mask_gt).sum()
     fp = np.logical_and(mask_pred, ~mask_gt).sum()
@@ -167,19 +176,23 @@ def confusion_matrix(mask_pred, mask_gt):
     tn = np.logical_and(~mask_pred, ~mask_gt).sum()
     return tp, fp, fn, tn
 
+# Computes Dice coefficient for segmentation accuracy
 def dice_score(mask_pred, mask_gt, smooth=1e-8):
     intersection = np.logical_and(mask_pred, mask_gt).sum()
     union = np.logical_or(mask_pred, mask_gt).sum()
     return (2.0*intersection + smooth) / (union + smooth)
 
+# Computes segmentation precision (TP / (TP + FP))
 def precision_score(mask_pred, mask_gt, smooth=1e-8):
     tp, fp, _, _ = confusion_matrix(mask_pred, mask_gt)
     return tp / (tp + fp + smooth)
 
+# Computes segmentation recall (TP / (TP + FN))
 def recall_score(mask_pred, mask_gt, smooth=1e-8):
     tp, _, fn, _ = confusion_matrix(mask_pred, mask_gt)
     return tp / (tp + fn + smooth)
 
+# Evaluates segmentation metrics for many images and stores per-image statistics
 def evaluate_segmentation(results, mask_paths, num_images):
     metrics = {
         "image_id": [],
@@ -211,9 +224,11 @@ def evaluate_segmentation(results, mask_paths, num_images):
 
     return metrics
 
+# Converts metric results stored in a dict into a pandas DataFrame
 def metrics_to_df(metrics):
     return pd.DataFrame(metrics)
 
+# Prints average IoU, Dice, precision and recall across all images
 def print_average_metrics(df_metrics):
     metrics_to_avg = ["iou", "dice", "precision", "recall"]
     averages = df_metrics[metrics_to_avg].mean()
@@ -223,6 +238,7 @@ def print_average_metrics(df_metrics):
         value = averages[metric]
         print(f" {metric}: {value:.4f}")
 
+# Plots IoU distribution histogram for all images
 def plot_iou_histogram(df_metrics, filename, bin=20):
     filename = Path(filename)
     with PdfPages(filename) as pdf:
@@ -237,6 +253,7 @@ def plot_iou_histogram(df_metrics, filename, bin=20):
         pdf.savefig(fig)
         plt.close(fig)
 
+# Plots IoU score per image ID and saves to PDF
 def plot_iou_per_image(df_metrics, filename):
     filename = Path(filename)
     with PdfPages(filename) as pdf:
