@@ -6,6 +6,8 @@ from skimage.morphology import disk, dilation
 
 from processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
 
+# Generates segmentation masks by combining red, blue and hue channel thresholds with NIR,
+# performs multiple cleaning operations, and stores intermediate + final masks for analysis
 def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, num_images):
     results = {
         "mask_r_and_nir": [],
