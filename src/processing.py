@@ -1,0 +1,32 @@
+import numpy as np
+from skimage.morphology import remove_small_objects, disk, closing
+from scipy.ndimage import binary_fill_holes, label
+
+def clean_mask(mask, minimum_size, selem_close):
+    mask = closing(mask, disk(selem_close))
+    mask = binary_fill_holes(mask)
+    mask = remove_small_objects(mask, min_size=minimum_size)
+    return mask
+
+def remove_big_objects(mask, max_size):
+    labels, num = label(mask)
+    out_mask = np.zeros_like(mask, dtype=bool)
+    for i in range(1, num+1):
+        region = (labels == i)
+        if region.sum() <= max_size:
+            out_mask[region] = True
+    return out_mask
+
+def adaptive_fp_cleanup(mask_pred, mask_gt, fp_ratio_thr=0.4, min_size_strong=120, selem_close_strong=5):
+    tp = np.logical_and(mask_pred, mask_gt).sum()
+    fp = np.logical_and(mask_pred, ~mask_gt).sum()
+
+    if tp + fp == 0:
+        return mask_pred, 0.0, False
+    fp_ratio = fp / (tp + fp)
+
+    if fp_ratio > fp_ratio_thr:
+        mask_cleaned = clean_mask(mask_pred, minimum_size=min_size_strong, selem_close=selem_close_strong)
+        return mask_cleaned, fp_ratio, True
+    
+    return mask_pred, fp_ratio, False
