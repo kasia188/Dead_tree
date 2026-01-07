@@ -22,6 +22,8 @@ dead\_tree/
 |-[README.md](http://README.md)  
 |-.gitignore
 
+Uwaga: Foldery `data/` i `results/` są **not tracked in Git**, ponieważ folder `data/` może być bardzo duży, a folder `results/` jest tworzony dynamicznie po uruchomieniu programu. Przed uruchomieniem skryptu oba foldery muszą istnieć lokalnie.
+
 Instalacja danych wejściowych:  
 Pobierz dane z linku i wstaw je do folderu data.  
 [https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation?resource=download](https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation?resource=download)  
