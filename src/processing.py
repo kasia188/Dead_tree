@@ -20,16 +20,17 @@ def remove_big_objects(mask, max_size):
     return out_mask
 
 # Dynamically cleans false positives when their ratio is too high vs true positives
-def adaptive_fp_cleanup(mask_pred, mask_gt, fp_ratio_thr=0.4, min_size_strong=120, selem_close_strong=5):
+def adaptive_fp_cleanup(mask_pred, mask_gt, config):
     tp = np.logical_and(mask_pred, mask_gt).sum()
     fp = np.logical_and(mask_pred, ~mask_gt).sum()
 
     if tp + fp == 0:
         return mask_pred, 0.0, False
+    
     fp_ratio = fp / (tp + fp)
 
-    if fp_ratio > fp_ratio_thr:
-        mask_cleaned = clean_mask(mask_pred, minimum_size=min_size_strong, selem_close=selem_close_strong)
+    if fp_ratio > config["FP_RATIO_THR"]:
+        mask_cleaned = clean_mask(mask_pred, minimum_size=config["MIN_SIZE_STRONG"], selem_close=config["SELEM_CLOSE_STRONG"])
         return mask_cleaned, fp_ratio, True
     
     return mask_pred, fp_ratio, False
