@@ -1,0 +1,9 @@
+data/*
+output/*
+
+config/config.yaml
+
+!data/.gitkeep
+!output/.gitkeep
+
+.venv/
