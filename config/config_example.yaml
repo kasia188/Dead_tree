@@ -1,0 +1,25 @@
+# --- numer of images to process ---
+NUM_IMAGES: null
+
+# --- folders ---
+INPUT_FOLDER: "data/USA_segmentation"
+OUTPUT_FOLDER: "results"
+
+# --- masking parameters ---
+MIN_SIZE: 5
+SELEM_CLOSE: 3
+MAX_SIZE: 1200
+
+# --- adaptive false positives cleanup ---
+FP_RATIO_THR: 0.4
+MIN_SIZE_STRONG: 120
+SELEM_CLOSE_STRONG: 5
+
+# --- channels thresholds ---
+R_STD_MULT: 0.1
+B_STD_MULT: 0.1
+H_STD_MULT: 0.1
+NIR_STD_MULT: 0.5
+
+# --- mask h-black threshold ---
+H_BLACK_RATIO: 0.9
