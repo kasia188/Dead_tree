@@ -1,33 +1,20 @@
 from pathlib import Path
 
 # Loads RGB, NIR and mask file paths from the dataset directory and performs sanity checks
-def load_paths():
-    project_root = Path(__file__).resolve().parent.parent
-    data_dir = project_root / "data" / "USA_segmentation"
+def load_paths(config):
+    rgb_folder = Path(config["RGB_FOLDER"])
+    nir_folder = Path(config["NIR_FOLDER"])
+    mask_folder = Path(config["MASK_FOLDER"])
 
-    rgb_dir = data_dir / "RGB_images"
-    nir_dir = data_dir / "NRG_images"
-    mask_dir = data_dir / "masks"
+    rgb_paths = sorted(rgb_folder.glob("*")) if rgb_folder.exists() else []
+    nir_paths = sorted(nir_folder.glob("*")) if nir_folder.exists() else []
+    mask_paths = sorted(mask_folder.glob("*")) if mask_folder.exists() else []
 
-    print("Project root:", project_root)
-    print("Data dir exists:", data_dir.exists())
-    print("RGB exists:", rgb_dir.exists())
-    print("NRG exists:", nir_dir.exists())
-    print("Masks exists:", mask_dir.exists())
-
-    rgb_paths = sorted(rgb_dir.glob("*")) if rgb_dir.exists() else []
-    nir_paths = sorted(nir_dir.glob("*")) if nir_dir.exists() else []
-    mask_paths = sorted(mask_dir.glob("*")) if mask_dir.exists() else []
-
-    print("Number of RGB files:", len(rgb_paths))
-    print("Number of NRG files:", len(nir_paths))
-    print("Number of mask files:", len(mask_paths))
-
-    if not rgb_paths or not nir_paths or not mask_paths:
-        raise FileNotFoundError(
-            f"Dataset not found or empty. "
-            f"Check that your data folder is here: {data_dir} "
-            f"and contains RGB_images, NIR_images, and masks folders with files."
-        )
+    if not rgb_paths:
+        print(f"[Warning] No files found in RGB folder: {rgb_folder}")
+    if not nir_paths:
+        print(f"[Warning] No files found in NIR folder: {nir_folder}")
+    if not mask_paths:
+        print(f"[Warning] No files found in MASK folder: {mask_folder}")
 
     return rgb_paths, nir_paths, mask_paths
