@@ -17,9 +17,11 @@ def mask_to_bool(mask):
         return mask > 128
 
 # Displays NIR, RGB and mask images and saves them into a multipage PDF file
-def display_data(nir_paths, rgb_paths, mask_paths, filename="results/data_display.pdf", num_images=300):
-  filename = Path(filename)
-  with PdfPages(filename) as pdf:
+def display_data(nir_paths, rgb_paths, mask_paths, config):
+  num_images = config["NUM_IMAGES"]
+  output_file = Path(config["OUTPUT_FOLDER"]) / "data_display.pdf"
+
+  with PdfPages(output_file) as pdf:
     for i in range(num_images):
         nir = imread(nir_paths[i])
         rgb = imread(rgb_paths[i])
@@ -67,13 +69,13 @@ def channel_statistics(channel, mask_bool, name):
     print(f" Separation: {separation:.4f}")
 
 # Plots pixel value histograms for masked foreground vs background
-def plot_channel_hist(channel, mask_bool, title, pdf=None):
+def plot_channel_hist(channel, mask_bool, title, config, pdf=None):
     class_tree = channel[mask_bool]
     class_bg = channel[~mask_bool]
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.hist(class_bg.flatten(), bins=50, alpha=0.5, label="Background", density=True)
-    ax.hist(class_tree.flatten(), bins=50, alpha=0.5, label="Dead tree", density=True)
+    ax.hist(class_bg.flatten(), bins=config["HIST_BINS"], alpha=config["HIST_ALPHA"], label="Background", density=True)
+    ax.hist(class_tree.flatten(), bins=config["HIST_BINS"], alpha=config["HIST_ALPHA"], label="Dead tree", density=True)
     ax.set_title(f"Histogram of a canal: {title}") 
     ax.set_xlabel("Pixel value")
     ax.set_ylabel("Probability density")
@@ -87,9 +89,11 @@ def plot_channel_hist(channel, mask_bool, title, pdf=None):
         plt.show()
 
 # Creates histograms for RGB + HSV channels and saves them to a multipage PDF file
-def channel_histograms(rgb_paths, mask_paths, filename="results/channel_histograms.pdf", num_images=300):
-    filename = Path(filename)
-    with PdfPages(filename) as pdf:
+def channel_histograms(rgb_paths, mask_paths, config):
+    num_images = config["NUM_IMAGES"]
+    output_file = Path(config["OUTPUT_FOLDER"]) / "channel_histograms.pdf"
+
+    with PdfPages(output_file) as pdf:
         for i in range(num_images):
             rgb = imread(rgb_paths[i])
             mask = mask_to_bool(imread(mask_paths[i]))
@@ -108,7 +112,8 @@ def channel_histograms(rgb_paths, mask_paths, filename="results/channel_histogra
                 plot_channel_hist(ch, mask, f"Image {i+1} - {name}", pdf=pdf)
 
 # Finds which channel provides the strongest separation between tree mask and background
-def find_best_channels(rgb_paths, mask_paths, num_images=300):
+def find_best_channels(rgb_paths, mask_paths, config):
+    num_images = config["NUM_IMAGES"]
     channels_names = ["R", "G", "B", "H","S", "V"]
     best_channel_counts = {name:0 for name in channels_names}
 
@@ -142,12 +147,13 @@ def find_best_channels(rgb_paths, mask_paths, num_images=300):
     return best_channel_counts
 
 # Plots how many images each channel was the best separator for
-def plot_best_channels(best_channel_counts, filename="results/best_channels.pdf"):
-    filename = Path(filename)
-    with PdfPages(filename) as pdf:
+def plot_best_channels(best_channel_counts, config):
+    output_file = Path(config["OUTPUT_FOLDER"]) / "best_channels.pdf"
+
+    with PdfPages(output_file) as pdf:
         fig, ax = plt.subplots(figsize=(8, 5))
         ax.bar(best_channel_counts.keys(), best_channel_counts.values(), color='skyblue')
-        ax.set_ylabel("Number of images, in which canal had the gratest separation")
+        ax.set_ylabel("Number of images where channel was best")
         ax.set_title("Best channels based on class separation")
         plt.tight_layout()
         
@@ -193,7 +199,8 @@ def recall_score(mask_pred, mask_gt, smooth=1e-8):
     return tp / (tp + fn + smooth)
 
 # Evaluates segmentation metrics for many images and stores per-image statistics
-def evaluate_segmentation(results, mask_paths, num_images):
+def evaluate_segmentation(results, mask_paths, config):
+    num_images = config["NUM_IMAGES"]
     metrics = {
         "image_id": [],
         "iou": [],
@@ -239,11 +246,12 @@ def print_average_metrics(df_metrics):
         print(f" {metric}: {value:.4f}")
 
 # Plots IoU distribution histogram for all images
-def plot_iou_histogram(df_metrics, filename, bin=20):
-    filename = Path(filename)
-    with PdfPages(filename) as pdf:
+def plot_iou_histogram(df_metrics, config):
+    output_file = Path(config["OUTPUT_FOLDER"]) / "iou_histogram.pdf"
+
+    with PdfPages(output_file) as pdf:
         fig, ax = plt.subplots(figsize=(8,5))
-        ax.hist(df_metrics["iou"], bins=bin, color="skyblue")
+        ax.hist(df_metrics["iou"], bins=config["HIST_BINS"], color="skyblue")
         ax.set_xlabel("IoU")
         ax.set_ylabel("Number of images")
         ax.set_title("IoU distribution")
@@ -254,9 +262,10 @@ def plot_iou_histogram(df_metrics, filename, bin=20):
         plt.close(fig)
 
 # Plots IoU score per image ID and saves to PDF
-def plot_iou_per_image(df_metrics, filename):
-    filename = Path(filename)
-    with PdfPages(filename) as pdf:
+def plot_iou_per_image(df_metrics, config):
+    output_file = Path(config["OUTPUT_FOLDER"]) / "iou_histogram.pdf"
+
+    with PdfPages(output_file) as pdf:
         fig, ax = plt.subplots(figsize=(10,5))
         ax.plot(df_metrics["image_id"], df_metrics["iou"], marker="o", linestyle="-", color="blue")
         ax.set_xlabel("Image ID")
