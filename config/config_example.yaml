@@ -2,13 +2,24 @@
 NUM_IMAGES: null
 
 # --- folders ---
-INPUT_FOLDER: "data/USA_segmentation"
-OUTPUT_FOLDER: "results"
+INPUT_FOLDER: "data/data_examples/"
+OUTPUT_FOLDER: "output"
+RGB_FOLDER:
+NIR_FOLDER:
+MASK_FOLDER:
 
 # --- masking parameters ---
-MIN_SIZE: 5
-SELEM_CLOSE: 3
+R_MIN_SIZE: 5
+B_MIN_SIZE: 5
+H_MIN_SIZE: 150
+R_SELEM_CLOSE: 3
+B_SELEM_CLOSE: 3
+H_SELEM_CLOSE: 2
 MAX_SIZE: 1200
+
+# --- adaptive mask parameters ---
+MIN_SIZE_WEAK: 5
+MIN_SIZE_STRONG: 50
 
 # --- adaptive false positives cleanup ---
 FP_RATIO_THR: 0.4
