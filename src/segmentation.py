@@ -48,13 +48,13 @@ def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
         mask_r_b = dilation(mask_r_b, disk(2))
 
         mask_final = mask_r_b & (~mask_h_and_nir)
-        mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_WEAK"], selem_close=config["SELEM_CLOSE"])
+        mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_WEAK"], selem_close=config["FINAL_SELEM_CLOSE"])
         mask_final = remove_big_objects(mask_final, max_size=config["MAX_SIZE"])
         
         if use_h:
-            mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_STRONG"], selem_close=config["SELEM_CLOSE"])
+            mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_STRONG"], selem_close=config["FINAL_SELEM_CLOSE"])
         else:
-            mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_WEAK"], selem_close=config["SELEM_CLOSE"])
+            mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_WEAK"], selem_close=config["FINAL_SELEM_CLOSE"])
 
         mask_final, _, _ = adaptive_fp_cleanup(mask_final, mask_gt, config)
 
