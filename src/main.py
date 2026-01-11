@@ -26,9 +26,9 @@ def main():
 
     # Key user parameters
     parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to configuration file YAML")
-    parser.add_argument("--rgb_folder", type=str, required=True, help="Folder with RGB images")
-    parser.add_argument("--nir_folder", type=str, required=True, help="Folder z NIR images")
-    parser.add_argument("--mask_folder", type=str, required=True, help="Folder z ground truth mask")
+    parser.add_argument("--rgb_folder", type=str, default=None, help="Folder with RGB images")
+    parser.add_argument("--nir_folder", type=str, default=None, help="Folder z NIR images")
+    parser.add_argument("--mask_folder", type=str, default=None, help="Folder z ground truth mask")
     parser.add_argument("--output_folder", type=str, default="output", help="Folder wyjściowy dla wyników")
     parser.add_argument("--num_images", type=int, default=config["NUM_IMAGES"], help="Liczba obrazów do przetworzenia")
     
