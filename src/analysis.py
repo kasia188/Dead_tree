@@ -113,7 +113,7 @@ def channel_histograms(rgb_paths, mask_paths, config):
             }
 
             for name, ch in channels.items():
-                plot_channel_hist(ch, mask, f"Image {i+1} - {name}", pdf=pdf)
+                plot_channel_hist(ch, mask, f"Image {i+1} - {name}", config, pdf=pdf)
 
 # Finds which channel provides the strongest separation between tree mask and background
 def find_best_channels(rgb_paths, mask_paths, config):
