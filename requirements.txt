@@ -3,4 +3,4 @@ pandas
 matplotlib
 scikit-image
 scipy
-yaml
+pyyaml
