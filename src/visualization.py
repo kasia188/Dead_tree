@@ -5,7 +5,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # Visualizes intermediate and final segmentation masks along with ground truth,
 # and saves all images into a multipage PDF file
-def visualize_final_mask(mask_paths, results, filename, config):
+def visualize_final_mask(mask_paths, results, config):
     num_images = config["NUM_IMAGES"]
 
     output_folder = Path(config["OUTPUT_FOLDER"])

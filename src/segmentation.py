@@ -55,7 +55,7 @@ def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
         else:
             mask_final = clean_mask(mask_final, minimum_size=config["MIN_SIZE_WEAK"], selem_close=config["SELEM_CLOSE"])
 
-        mask_final, _, _ = adaptive_fp_cleanup(mask_final, mask_gt, fp_ratio_thr=config["FP_RATIO_THR"])
+        mask_final, _, _ = adaptive_fp_cleanup(mask_final, mask_gt, config)
 
         results["mask_r_and_nir"].append(mask_r_and_nir)
         results["mask_b_and_nir"].append(mask_b_and_nir)

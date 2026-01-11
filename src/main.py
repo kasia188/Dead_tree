@@ -23,7 +23,6 @@ def main():
         config = yaml.safe_load(f)
 
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
-    parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to configuration YAML file")
 
     # Key user parameters
     parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to configuration file YAML")
@@ -32,12 +31,6 @@ def main():
     parser.add_argument("--mask_folder", type=str, required=True, help="Folder z ground truth mask")
     parser.add_argument("--output_folder", type=str, default="output", help="Folder wyjściowy dla wyników")
     parser.add_argument("--num_images", type=int, default=config["NUM_IMAGES"], help="Liczba obrazów do przetworzenia")
-
-    # Output files names
-    parser.add_argument("--final_masks_file", type=str, default=config["FINAL_MASKS_FILENAME"])
-    parser.add_argument("--channel_hist_file", type=str, default=config["CHANNEL_HIST_FILENAME"])
-    parser.add_argument("--iou_hist_file", type=str, default=config["IOU_HIST_FILENAME"])
-    parser.add_argument("--iou_per_image_file", type=str, default=config["IOU_PER_IMAGE_FILENAME"])
     
     args = parser.parse_args()
 
