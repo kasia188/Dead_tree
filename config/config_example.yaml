@@ -4,9 +4,9 @@ NUM_IMAGES: null
 # --- folders ---
 INPUT_FOLDER: "data/data_examples/"
 OUTPUT_FOLDER: "output"
-RGB_FOLDER:
-NIR_FOLDER:
-MASK_FOLDER:
+RGB_FOLDER: "data/data_examples/RGB_images_ex"
+NIR_FOLDER: "data/data_examples/NRG_images_ex"
+MASK_FOLDER: "data/data_examples/mask_ex"
 
 # --- masking parameters ---
 R_MIN_SIZE: 5
@@ -34,3 +34,7 @@ NIR_STD_MULT: 0.5
 
 # --- mask h-black threshold ---
 H_BLACK_RATIO: 0.9
+
+# --- histogram settings ---
+HIST_BINS: 50
+HIST_ALPHA: 0.5
