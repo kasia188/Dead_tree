@@ -22,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
 
     # Key user parameters
-    parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to YAML configuration file")
+    parser.add_argument("--config", type=str, default=None, help="Path to YAML configuration file")
     parser.add_argument("--rgb_folder", type=str, default=None, help="Folder with RGB images")
     parser.add_argument("--nir_folder", type=str, default=None, help="Folder with NIR images")
     parser.add_argument("--mask_folder", type=str, default=None, help="Folder with ground truth mask")
