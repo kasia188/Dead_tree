@@ -4,7 +4,7 @@ from skimage.transform import resize
 from skimage import color
 from skimage.morphology import disk, dilation
 
-from processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
+from .processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
 
 # Generates segmentation masks by combining red, blue and hue channel thresholds with NIR,
 # performs multiple cleaning operations, and stores intermediate + final masks for analysis
