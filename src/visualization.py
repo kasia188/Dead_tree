@@ -7,6 +7,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 # and saves all images into a multipage PDF file
 def visualize_final_mask(mask_paths, results, config):
     num_images = config["NUM_IMAGES"]
+    if num_images is None:
+        num_images = len(mask_paths)
 
     output_folder = Path(config["OUTPUT_FOLDER"])
     output_folder.mkdir(parents=True, exist_ok=True)

@@ -19,6 +19,8 @@ def mask_to_bool(mask):
 # Displays NIR, RGB and mask images and saves them into a multipage PDF file
 def display_data(nir_paths, rgb_paths, mask_paths, config):
   num_images = config["NUM_IMAGES"]
+  if num_images is None:
+    num_images = len(rgb_paths)
   output_file = Path(config["OUTPUT_FOLDER"]) / "data_display.pdf"
 
   with PdfPages(output_file) as pdf:
@@ -91,6 +93,8 @@ def plot_channel_hist(channel, mask_bool, title, config, pdf=None):
 # Creates histograms for RGB + HSV channels and saves them to a multipage PDF file
 def channel_histograms(rgb_paths, mask_paths, config):
     num_images = config["NUM_IMAGES"]
+    if num_images is None:
+        num_images = len(rgb_paths)
     output_file = Path(config["OUTPUT_FOLDER"]) / "channel_histograms.pdf"
 
     with PdfPages(output_file) as pdf:
@@ -114,6 +118,8 @@ def channel_histograms(rgb_paths, mask_paths, config):
 # Finds which channel provides the strongest separation between tree mask and background
 def find_best_channels(rgb_paths, mask_paths, config):
     num_images = config["NUM_IMAGES"]
+    if num_images is None:
+        num_images = len(rgb_paths)
     channels_names = ["R", "G", "B", "H","S", "V"]
     best_channel_counts = {name:0 for name in channels_names}
 
@@ -201,6 +207,8 @@ def recall_score(mask_pred, mask_gt, smooth=1e-8):
 # Evaluates segmentation metrics for many images and stores per-image statistics
 def evaluate_segmentation(results, mask_paths, config):
     num_images = config["NUM_IMAGES"]
+    if num_images is None:
+        num_images = len(mask_paths)
     metrics = {
         "image_id": [],
         "iou": [],
