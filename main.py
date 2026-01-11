@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--nir_folder", type=str, default=None, help="Folder z NIR images")
     parser.add_argument("--mask_folder", type=str, default=None, help="Folder z ground truth mask")
     parser.add_argument("--output_folder", type=str, default=None, help="Folder wyjściowy dla wyników")
+    parser.add_argument("--input_folder", type=str, default=None, help="Folder z danymi wejsciowymi")
     parser.add_argument("--num_images", type=int, default=config["NUM_IMAGES"], help="Liczba obrazów do przetworzenia")
     
     args = parser.parse_args()
@@ -38,6 +39,7 @@ def main():
     if args.nir_folder: config["NIR_FOLDER"] = args.nir_folder
     if args.mask_folder: config["MASK_FOLDER"] = args.mask_folder
     if args.output_folder: config["OUTPUT_FOLDER"] = args.output_folder
+    if args.input_folder: config["INPUT_FOLDER"] = args.input_folder
     if args.num_images: config["NUM_IMAGES"] = args.num_images
 
     output_folder = Path(config["OUTPUT_FOLDER"])
