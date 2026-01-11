@@ -3,6 +3,7 @@ import yaml
 from pathlib import Path
 
 from src.data_loader import load_paths
+from src.processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
 from src.segmentation import create_mask_r_and_b_minus_h
 from src.visualization import visualize_final_mask
 from src.analysis import (
