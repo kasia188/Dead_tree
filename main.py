@@ -20,6 +20,10 @@ from src.analysis import (
 def main():
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
 
+    # Load configuration file
+    with open(args.config, "r") as f:
+        config = yaml.safe_load(f)
+        
     # Key user parameters
     parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to YAML configuration file")
     parser.add_argument("--rgb_folder", type=str, default=None, help="Folder with RGB images")
@@ -60,10 +64,6 @@ def main():
     parser.add_argument("--hist_alpha", type=float, default=None, help="Histogram transparency")
 
     args = parser.parse_args()
-
-    # Load configuration file
-    with open(args.config, "r") as f:
-        config = yaml.safe_load(f)
 
     # Override config with CLI arguments (only if provided)
     def override(key, value):
