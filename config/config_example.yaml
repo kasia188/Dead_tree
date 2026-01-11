@@ -1,4 +1,6 @@
 # --- numer of images to process ---
+# null - process all images
+# int - limit number of processed images
 NUM_IMAGES: null
 
 # --- folders ---

@@ -9,6 +9,7 @@ from processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
 # Generates segmentation masks by combining red, blue and hue channel thresholds with NIR,
 # performs multiple cleaning operations, and stores intermediate + final masks for analysis
 def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
+    num_images = config["NUM_IMAGES"]
     results = {
         "mask_r_and_nir": [],
         "mask_b_and_nir": [],
@@ -17,7 +18,7 @@ def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
     }
 
     for i, (rgb_path, nir_path, mask_path) in enumerate(zip(rgb_paths, nir_paths, mask_paths)):
-        if i >= config["NUM_IMAGES"]:
+        if num_images is not None and i >= num_images:
             break
 
         rgb = imread(rgb_path)
