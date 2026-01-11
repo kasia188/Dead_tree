@@ -76,7 +76,6 @@ def main():
         if value is not None:
             config[key] = value
 
-    override("INPUT_FOLDER", args.input_folder)
     override("RGB_FOLDER", args.rgb_folder)
     override("NIR_FOLDER", args.nir_folder)
     override("MASK_FOLDER", args.mask_folder)
