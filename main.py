@@ -2,10 +2,10 @@ import argparse
 import yaml
 from pathlib import Path
 
-from data_loader import load_paths
-from segmentation import create_mask_r_and_b_minus_h
-from visualization import visualize_final_mask
-from analysis import (
+from src.data_loader import load_paths
+from src.segmentation import create_mask_r_and_b_minus_h
+from src.visualization import visualize_final_mask
+from src.analysis import (
     display_data,
     channel_histograms,
     find_best_channels,
