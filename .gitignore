@@ -3,5 +3,9 @@ data/data/
 output/output/
 config/config.yaml
 
+#venv
 .venv/
 
+# Python cache
+__pycache__/
+*.pyc
