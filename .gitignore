@@ -1,7 +1,13 @@
 # User data
-data/data/
-output/output/
+data/*
+output/*
 config/config.yaml
+
+!data/data_examples/
+!data/data_examples/**
+
+!output/output_examples/
+!output/output_examples/**
 
 #venv
 .venv/
