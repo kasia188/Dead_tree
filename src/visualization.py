@@ -13,7 +13,7 @@ def visualize_final_mask(mask_paths, results, config):
     output_folder = Path(config["OUTPUT_FOLDER"])
     output_folder.mkdir(parents=True, exist_ok=True)
 
-    filename = output_folder / config["FINAL_MASKS_FILENAME"]
+    filename = output_folder / "final_masks.pdf"
 
     total_available = len(results["mask_final"])
     num_images = min(num_images, total_available)
