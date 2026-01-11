@@ -1,13 +1,7 @@
-data/data*
-output/output*
-
+# User data
+data/data/
+output/output/
 config/config.yaml
 
 .venv/
 
-output/best_channels.pdf
-output/channel_histograms.pdf
-output/final_masks.pdf
-output/iou_histogram.pdf
-output/iou_histogram.pdf
-output/data_display.pdf
