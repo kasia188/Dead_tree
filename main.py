@@ -20,12 +20,8 @@ from src.analysis import (
 def main():
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
 
-    # Load configuration file
-    with open(args.config, "r") as f:
-        config = yaml.safe_load(f)
-        
     # Key user parameters
-    parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to YAML configuration file")
+    parser.add_argument("--config", type=str, default=None, help="Path to YAML configuration file")
     parser.add_argument("--rgb_folder", type=str, default=None, help="Folder with RGB images")
     parser.add_argument("--nir_folder", type=str, default=None, help="Folder with NIR images")
     parser.add_argument("--mask_folder", type=str, default=None, help="Folder with ground truth mask")
@@ -65,6 +61,10 @@ def main():
 
     args = parser.parse_args()
 
+    # Load configuration file
+    with open(args.config, "r") as f:
+        config = yaml.safe_load(f)
+        
     # Override config with CLI arguments (only if provided)
     def override(key, value):
         if value is not None:
