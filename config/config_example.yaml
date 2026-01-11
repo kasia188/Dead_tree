@@ -4,7 +4,6 @@
 NUM_IMAGES: null
 
 # --- folders ---
-INPUT_FOLDER: "data/data_examples/"
 OUTPUT_FOLDER: "output/output/"
 RGB_FOLDER: "data/data_examples/RGB_images_ex"
 NIR_FOLDER: "data/data_examples/NRG_images_ex"
