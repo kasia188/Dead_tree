@@ -1,4 +1,5 @@
 import argparse
+import sys
 import yaml
 from pathlib import Path
 
@@ -21,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
 
     # Key user parameters
-    parser.add_argument("--config", type=str, default=None, help="Path to YAML configuration file")
+    parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to YAML configuration file")
     parser.add_argument("--rgb_folder", type=str, default=None, help="Folder with RGB images")
     parser.add_argument("--nir_folder", type=str, default=None, help="Folder with NIR images")
     parser.add_argument("--mask_folder", type=str, default=None, help="Folder with ground truth mask")
@@ -62,10 +63,15 @@ def main():
     args = parser.parse_args()
 
     # Load configuration file
+    config_path = Path(args.config)
+    if not config_path.exists():
+        print(f"Config file not found: {config_path}")
+        sys.exit(1)
+
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
-        
-    # Override config with CLI arguments (only if provided)
+
+    # Override config with arguments (only if provided)
     def override(key, value):
         if value is not None:
             config[key] = value
