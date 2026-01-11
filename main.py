@@ -26,7 +26,7 @@ def main():
     parser.add_argument("--nir_folder", type=str, default=None, help="Folder with NIR images")
     parser.add_argument("--mask_folder", type=str, default=None, help="Folder with ground truth mask")
     parser.add_argument("--output_folder", type=str, default=None, help="Output folder for results")
-    parser.add_argument("--num_images", type=int, default=config["NUM_IMAGES"], help="Number of images to process (omit to process all images)")
+    parser.add_argument("--num_images", type=int, default=config["NUM_IMAGES"], help="Number of images to process, omit to process all images")
     
     # Masking parameters
     parser.add_argument("--r_min_size", type=int, default=None, help="Minimum size of R-channel objects")
