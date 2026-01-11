@@ -18,15 +18,12 @@ from analysis import (
 )
 
 def main():
+    default_config_file = Path("config/config_example.yaml")
+    with open(default_config_file, "r") as f:
+        config = yaml.safe_load(f)
+
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
     parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to configuration YAML file")
-    args, remaining_argv = parser.parse_known_args()
-
-    config_file = Path(args.config)
-    if not config_file.exists():
-        raise FileNotFoundError(f"Plik config nie istnieje: {config_file}")
-    with open(config_file, "r") as f:
-        config = yaml.safe_load(f)
 
     # Key user parameters
     parser.add_argument("--config", type=str, default="config/config_example.yaml", help="Path to configuration file YAML")
@@ -41,10 +38,8 @@ def main():
     parser.add_argument("--channel_hist_file", type=str, default=config["CHANNEL_HIST_FILENAME"])
     parser.add_argument("--iou_hist_file", type=str, default=config["IOU_HIST_FILENAME"])
     parser.add_argument("--iou_per_image_file", type=str, default=config["IOU_PER_IMAGE_FILENAME"])
-    args = parser.parse_args(remaining_argv)
     
-    with open(config_file, "r") as f:
-        config = yaml.safe_load(f)
+    args = parser.parse_args()
 
     if args.rgb_folder: config["RGB_FOLDER"] = args.rgb_folder
     if args.nir_folder: config["NIR_FOLDER"] = args.nir_folder
@@ -79,7 +74,7 @@ def main():
 
     print("Segmentation metrics")
     print(df_metrics)
-    print("\Segmentation metrics per image:")
+    print("Segmentation metrics per image:")
     print_average_metrics(df_metrics)
 
     # IoU plots
