@@ -67,19 +67,27 @@ The pipeline produces:
 * NIR image  
 * Ground truth mask
 
-![Example of data display]["Dead_tree/images_readme/Zrzut ekranu 2026-01-12 193814.png"]
+<p align="center">
+  <img src="images_readme/Zrzut ekranu 2026-01-12 193814.png" width="1000">
+  <br>
+  <em>Display of data (saved in output/output/data_display.pdf)</em>
+</p>
 
-(data\_display.pdf)
+2) Display of histograms (pixel value and density probability for Background and Dead_tree) for each channel from RGB and HSV
 
-2) Display of histograms (pixel value and density probability for Background and Dead\_tree) for each channel from RGB and HSV  
-   ![Histogram of channels]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 194555.png"]
+<p align="center">
+  <img src="images_readme/Zrzut ekranu 2026-01-12 194555.png" width="750">
+  <br>
+  <em>Histogram of channels R and G for 1 image (saved in output/output/channel_histograms.pdf)</em>
+</p>
 
-(channel\_histograms.pdf)
+3) Display of histogram that shows how many times each canal was best in separating dead trees from the background
 
-3) Display of histogram that shows how many times each canal was best in separating dead trees from the background  
-   ![Best channel histogram]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 194927.png"]
-
-(best\_channels.pdf)
+<p align="center">
+  <img src="images_readme/Zrzut ekranu 2026-01-12 194927.png" width="1000">
+  <br>
+  <em>Best channel histogram (saved in output/output/best_channels.pdf)</em>
+</p>
 
 4) Display side-by-side of:  
 * R and nir mask  
@@ -87,14 +95,20 @@ The pipeline produces:
 * H and nir mask  
 * final mask  
 * Ground truth mask  
-  ![Final masks display]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 200929.png"] 
 
-(final\_masks.pdf)
+<p align="center">
+  <img src="images_readme/Zrzut ekranu 2026-01-12 200929.png" width="1000">
+  <br>
+  <em>Final masks display (saved in output/output/final_masks.pdf)</em>
+</p>
 
 5) Display of histogram of IoU per image  
-   ![IoU histogram]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 201240.png"]
 
-(iou\_histogram.pdf)
+<p align="center">
+  <img src="images_readme/Zrzut ekranu 2026-01-12 201240.png" width="1000">
+  <br>
+  <em>IoU histogram (saved in output/output/iou_histogram.pdf)</em>
+</p>
 
 ---
 
