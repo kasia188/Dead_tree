@@ -109,6 +109,11 @@ def main():
     override("HIST_ALPHA", args.hist_alpha)
 
     # Ensure output folder exists
+    BASE_DIR = Path(__file__).parent.resolve()
+
+    if config.get("OUTPUT_FOLDER") is None:
+        config["OUTPUT_FOLDER"] = str(BASE_DIR / "output/output")
+
     output_folder = Path(config["OUTPUT_FOLDER"])
     output_folder.mkdir(parents=True, exist_ok=True)
 
