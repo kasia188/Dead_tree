@@ -67,7 +67,7 @@ The pipeline produces:
 * NIR image  
 * Ground truth mask
 
-![Example of data display]["/images_readme/Zrzut ekranu 2026-01-12 193814.png"]
+![Example of data display]["Dead_tree/images_readme/Zrzut ekranu 2026-01-12 193814.png"]
 
 (data\_display.pdf)
 
