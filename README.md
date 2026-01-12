@@ -7,14 +7,23 @@ The project combines RGB and NIR bands, supports YAML configuration, CLI overrid
 Key Features
 
 ✔ Automatic loading of RGB, NIR and mask datasets
+
 ✔ Classical feature-engineering segmentation
+
 ✔ RGB- & NIR-based masking and fusion
+
 ✔ Per-image visualization & PDF summary
+
 ✔ YAML-driven configuration
+
 ✔ CLI overrides using argparse
+
 ✔ IoU metric computation & summary plots
+
 ✔ Auto-creation of output folders
+
 ✔ Reproducible environment via requirements.txt
+
 
 Processing Pipeline
 
@@ -128,7 +137,7 @@ Results are saved automatically under:
 
 output/<run_name>/
 
-🛠️ Installation & Setup
+Installation & Setup
 1️) Create environment
 python -m venv .venv
 
