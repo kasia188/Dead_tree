@@ -1,73 +1,222 @@
-Projekt służy do segmentacji martwych drzew na zdjęciach lotniczych  
-przy użyciu informacji z kanałów RGB oraz NRG. Pipeline generuje maski,  
-czyści je, łączy oraz porównuje z maskami referencyjnymi(ground truth), a następnie  
-oblicza metryki jakości i tworzy wizualizacje.
+Dead Tree Segmentation using RGB & NIR Imagery
 
-Struktura projektu:  
-dead\_tree/  
-|-src/  
-||-[main.py](http://main.py) \#główny program (tworzy maski i oblicza metryki)  
-||-[analysis.py](http://analysis.py) \#funkcje do obliczania metryk (IoU, dice, precision, recall) i wykresy (PDF)  
-||-[segmentation.py](http://segmentation.py) \#logika maskowania  
-||-[processing.py](http://processing.py) \#czyszczenie masek, morfologia  
-||-[visualization.py](http://visualization.py) \#wyświetlanie utworzonych masek  
-||-data\_loader.py \#wczytanie ścieżek danych  
-||-analyse\_data.py \#analiza danych przed tworzeniem masek  
-|  
-|-data/ \#dane wejściowe (nie w repozytorium)  
-|  
-|-results/ \#zapisywane PDF-y  
-|  
-|-requirements.txt  
-|-[README.md](http://README.md)  
-|-.gitignore
+A classical computer vision pipeline for pixel-level segmentation of standing dead trees using multi-spectral aerial imagery.
 
-Uwaga: Foldery `data/` i `results/` są **not tracked in Git**, ponieważ folder `data/` może być bardzo duży, a folder `results/` jest tworzony dynamicznie po uruchomieniu programu. Przed uruchomieniem skryptu oba foldery muszą istnieć lokalnie.
+The project combines RGB and NIR bands, supports YAML configuration, CLI overrides, and generates both visual reports and quantitative evaluation metrics.
 
-Instalacja danych wejściowych:  
-Pobierz dane z linku i wstaw je do folderu data.  
-[https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation?resource=download](https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation?resource=download)  
-Projekt wymaga następującej struktury danych:  
-|-data/  
-||-USA\_segmentation/  
-|||-RGB\_images/  
-|||-NRG\_images/  
-|||-masks/
+Key Features
 
-Uruchamianie projektu:  
-python src/analyse\_data.py  
-python src/[main.py](http://main.py)
+✔ Automatic loading of RGB, NIR and mask datasets
+✔ Classical feature-engineering segmentation
+✔ RGB- & NIR-based masking and fusion
+✔ Per-image visualization & PDF summary
+✔ YAML-driven configuration
+✔ CLI overrides using argparse
+✔ IoU metric computation & summary plots
+✔ Auto-creation of output folders
+✔ Reproducible environment via requirements.txt
 
-Po uruchomieniu analyse\_data.py:
+Processing Pipeline
 
-1) Wczytanie ścieżek danych;  
-2) Sprawdzenie czy foldery data, RGB, NRG, masks istnieją, oraz ile plików jest w folderach RGB, NRG, masks;  
-3) Do folderu results zapisane zostaną:   
-- data\_display.pdf (wyświetlenie danych wejściowych);  
-- channel\_histograms.pdf (wyświetlenie histogramów poszczególnych kanałów RGB i HSV);  
-- best\_channels.pdf (wyświetlenie histogramu pokazującego, który kanał najlepiej separuje martwe drzewa od reszty zdjęcia);  
-4) Wypisane zostaną wyniki analizy, ile razy dany kanał był najleprzy w separacji martwych drzew od tła, dla danych wejściowych.
+1️)Load data paths (RGB, NIR, masks)
+2️) Explore dataset and compute statistics:
 
-Po uruchomieniu [main.py](http://main.py):
+pixel histograms,
 
-1) Wczytanie ścieżek danych;  
-2) Sprawdzenie czy foldery data, RGB, NRG, masks istnieją, oraz ile plików jest w folderach RGB, NRG, masks;  
-3) Utworzenie masek;  
-4)  Do folderu results zapisane zostaną:   
-- final\_masks.pdf (wyświetlenie masek R/B/H i NRG i final mask \- po połączeniu masek, oraz maski ground truth \- z danych wejściowych);  
-- iou\_histogram.pdf (wyświetlenie histogramu ilości obrazów o danej wartości IoU);  
-- iou\_per\_image.pdf (wyświetlenie wykresu jaką wartość IoU miał każdy obrazek);  
-5) Obliczenie metryk;  
-6) Wyświetlenie tabelki z wartościami metryk;  
-7) Wypisanie średnich wartości obliczonych metryk.
+best color channels,
 
-Wymagania:  
-Zainstaluj requirements.txt:  
-pip install \-r requirements.txt
+preview samples
+3️) Generate segmentation masks using:
 
-Metryki użyte w projekcie:  
-IoU \- Intersection over Union  
-Dice Score  
-Precision  
-Recall  
-TP / FP/ FN / TN
+handcrafted RGB/NIR rules
+
+morphological post-processing
+4️) Compare predictions to ground-truth
+5️) Compute:
+
+per-image metrics
+
+dataset averages
+6️) Save all results into an output folder
+
+Visual Outputs
+
+The pipeline produces a side-by-side display of:
+
+RGB image
+
+Ground truth mask
+
+Generated segmentation mask
+
+NIR contribution / enhancement
+
+Optional channel visualizations
+
+A combined final_masks.pdf is also generated.
+
+Dataset Structure
+
+Expected layout:
+
+data/
+├── RGB/        # RGB images (PNG/JPG/TIF)
+├── NIR/        # Near Infrared images (PNG/JPG/TIF)
+└── mask/       # Binary ground truth segmentation masks
+
+Configuration
+
+Settings are stored in a YAML file, e.g.:
+
+config/config_example.yaml
+
+
+Contains:
+
+paths to RGB, NIR, masks
+
+output folder
+
+number of processed images
+
+thresholding parameters
+
+plotting options
+
+You can override any parameter with CLI flags (below).
+
+Command-Line Interface (CLI)
+
+Wyświetl dostępne opcje:
+
+python main.py --help
+
+
+Przykładowe uruchomienie:
+
+python main.py \
+   --config config/config_example.yaml \
+   --rgb_folder data/RGB \
+   --nir_folder data/NIR \
+   --mask_folder data/mask \
+   --output_folder output/run01 \
+   --num_images 10
+
+
+Argumenty z terminala mają pierwszeństwo nad wartościami w YAML.
+
+Evaluation
+Quantitative
+
+IoU (Intersection over Union)
+
+Average metrics
+
+IoU per image plots
+
+Histogram distributions
+
+Qualitative
+
+Visualizations saved for each image
+
+Final multi-page PDF summary
+
+Debug plots of color channels
+
+Results are saved automatically under:
+
+output/<run_name>/
+
+🛠️ Installation & Setup
+1️) Create environment
+python -m venv .venv
+
+2️) Activate (Windows PowerShell)
+.\.venv\Scripts\Activate.ps1
+
+
+If blocked:
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+
+3️) Install dependencies
+pip install -r requirements.txt
+
+Running the Project
+
+Default configuration:
+
+python main.py
+
+
+With overrides:
+
+python main.py --num_images 5 --output_folder output/test
+
+Project Structure
+Dead-Tree/
+│
+├── main.py                     # Main pipeline script
+├── requirements.txt            # Packages
+├── README.md                   # This file
+├── /config/
+│   ├── config_example.yaml     # Default config (tracked)
+│   └── config.yaml             # Local config (ignored)
+├── /src/                       # Processing modules
+│   ├── data_loader.py
+│   ├── segmentation.py
+│   ├── visualization.py
+│   ├── analysis.py
+│   └── processing.py
+├── /data/                      
+│   ├── data/                    # Default input folder (tracked)
+│   │        ├── RGB/            # Local input folder (ignored)
+│   │        ├── NRG/
+│   │        ├── masks/
+│   └── data/
+└── /output/
+    ├── output_examples/         # Default output folder (tracked)
+    └── output/                  # Local output folder (ignored)
+
+
+Design Philosophy
+
+This project intentionally uses classical computer vision, not deep learning:
+
+Transparent & interpretable algorithms
+
+Easy to modify and debug
+
+Good research baseline for future ML work
+
+Fully reproducible & configurable
+
+Reproducibility
+
+All runtime choices in YAML
+
+CLI overrides for experiments
+
+Output folders never overwrite old runs
+
+requirements.txt freezes dependencies
+
+Final Notes
+
+This repo is suitable as:
+
+a research prototype,
+
+coursework or thesis asset,
+
+baseline for future DL segmentation.
+
+Feel free to expand:
+
+alternative spectral indices (NDVI, NBR),
+
+adaptive thresholding,
+
+deep learning models later.
