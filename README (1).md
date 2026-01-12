@@ -67,17 +67,17 @@ The pipeline produces:
 * NIR image  
 * Ground truth mask
 
-![][image1]
+![Example of data display]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 193814.png"]
 
 (data\_display.pdf)
 
 2) Display of histograms (pixel value and density probability for Background and Dead\_tree) for each channel from RGB and HSV  
-   ![][image2]
+   ![Histogram of channels]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 194555.png"]
 
 (channel\_histograms.pdf)
 
 3) Display of histogram that shows how many times each canal was best in separating dead trees from the background  
-   ![][image3]
+   ![Best channel histogram]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 194927.png"]
 
 (best\_channels.pdf)
 
@@ -87,12 +87,12 @@ The pipeline produces:
 * H and nir mask  
 * final mask  
 * Ground truth mask  
-  ![][image4] 
+  ![Final masks display]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 200929.png"] 
 
 (final\_masks.pdf)
 
 5) Display of histogram of IoU per image  
-   ![][image5]
+   ![IoU histogram]["C:\Users\katar\Pictures\Screenshots\Zrzut ekranu 2026-01-12 201240.png"]
 
 (iou\_histogram.pdf)
 
