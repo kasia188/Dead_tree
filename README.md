@@ -193,22 +193,54 @@ All results are saved under:
 
 ## **Installation & Setup**
 
+You can open this repo by copying code link:
+
+In bash: 
+
+  `cd /c/Users/Username/...`
+
+  `git clone https://github.com/kasia188/Dead_tree.git`
+
+You can open this repo also through downloading .zip file or open it in GitHub Desktop
+
+---
+
+For Windows:
 1. Create virtual environment
 
-`python -m venv .venv`
+  `python -m venv .venv`
 
 2. Activate (Windows PowerShell)
+  
+  `.\.venv\Scripts\Activate.ps1`
 
-`.\.venv\Scripts\Activate.ps1`
+  If activation is blocked:
 
-If activation is blocked:
+  `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`  
+  `.\.venv\Scripts\Activate.ps1`
 
-`Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`  
-`.\.venv\Scripts\Activate.ps1`
+  Activate (Windows Bash)
+
+  `source .venv/Scripts/activate`
 
 3. Install dependencies
 
-`pip install -r requirements.txt`
+  `pip install -r requirements.txt`
+
+---
+
+For MacOS/Linux:
+1. Create virtual environment
+   
+  `python -m venv .venv`
+
+2. Activate
+
+  `source .venv/bin/activate`
+
+3. Install dependencies
+
+  `pip install -r requirements.txt`
 
 ---
 
