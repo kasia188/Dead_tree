@@ -248,11 +248,9 @@ For MacOS/Linux:
 
 Default execution:
 
-`python main.py`
+`python main.py --num_images 5 --output_folder output/output`
 
-Override the number of processed images:
-
-`python main.py --num_images 5 --output_folder output/test`
+Number of proceeded images and name of output folder are required to be override.
 
 ---
 
