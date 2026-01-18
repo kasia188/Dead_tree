@@ -20,7 +20,19 @@ def mask_to_bool(mask):
 
 # Displays NIR, RGB and mask images and saves them into a multipage PDF file
 def display_data(nir_paths, rgb_paths, mask_paths, config):
-    num_images = config.get("NUM_IMAGES") or len(rgb_paths)
+    num_images_requested = config.get("NUM_IMAGES")
+    total_available = min(len(nir_paths), len(rgb_paths), len(mask_paths))
+
+    if num_images_requested is None:
+        num_images = total_available
+    else:
+        if num_images_requested > total_available:
+            logger.warning(
+                f"Requested number of images ({num_images_requested}) exceeds available images ({total_available}). "
+                f"Displaying {total_available} images instead."
+            )
+        num_images = min(num_images_requested, total_available)
+
     output_file = Path(config["OUTPUT_FOLDER"]) / "data_display.pdf"
     logger.info(f"Saving example images PDF for {num_images} images to {output_file}")
 

@@ -9,6 +9,8 @@ config/config.yaml
 !output/output_examples/
 !output/output_examples/**
 
+#loggin
+*.log
 #venv
 .venv/
 
