@@ -250,7 +250,7 @@ Default execution:
 
 `python main.py --num_images 5 --output_folder output/output`
 
-Number of proceeded images and name of output folder are required to be override.
+Entering number of proceeded images and name of output folder is required.
 
 ---
 
