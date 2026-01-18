@@ -218,9 +218,19 @@ def recall_score(mask_pred, mask_gt, smooth=1e-8):
 
 # Evaluates segmentation metrics for many images and stores per-image statistics
 def evaluate_segmentation(results, mask_paths, config):
-    num_images = config["NUM_IMAGES"]
-    if num_images is None:
-        num_images = len(mask_paths)
+    num_images_requested = config.get("NUM_IMAGES")
+    total_available = min(len(results.get("mask_final", [])), len(mask_paths))
+
+    if num_images_requested is None:
+        num_images = total_available
+    else:
+        if num_images_requested > total_available:
+            logger.warning(
+                f"Requested number of images ({num_images_requested}) exceeds available images ({total_available}). "
+                f"Evaluating {total_available} images instead."
+            )
+        num_images = min(num_images_requested, total_available)
+
     metrics = {
         "image_id": [],
         "iou": [],
