@@ -1,4 +1,7 @@
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Loads RGB, NIR and mask file paths from the dataset directory and performs sanity checks
 def load_paths(config):
@@ -11,10 +14,10 @@ def load_paths(config):
     mask_paths = sorted(mask_folder.glob("*")) if mask_folder.exists() else []
 
     if not rgb_paths:
-        print(f"[Warning] No files found in RGB folder: {rgb_folder}")
+        logger.warning(f"No files found in RGB folder: {rgb_folder}")
     if not nir_paths:
-        print(f"[Warning] No files found in NIR folder: {nir_folder}")
+        logger.warning(f"No files found in NIR folder: {nir_folder}")
     if not mask_paths:
-        print(f"[Warning] No files found in MASK folder: {mask_folder}")
+        logger.warning(f"No files found in MASK folder: {mask_folder}")
 
     return rgb_paths, nir_paths, mask_paths

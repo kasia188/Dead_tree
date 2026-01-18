@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 import yaml
 from pathlib import Path
@@ -17,6 +18,16 @@ from src.analysis import (
     plot_iou_histogram,
     plot_iou_per_image
 )
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("app.log", mode="w")
+    ]
+)
+logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(description="Pipeline for tree segmentation and analysis")
@@ -65,11 +76,12 @@ def main():
     # Load configuration file
     config_path = Path(args.config)
     if not config_path.exists():
-        print(f"Config file not found: {config_path}")
+        logger.error(f"Config file not found: {config_path}")
         sys.exit(1)
 
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
+    logger.info(f"Configuration loaded from {config_path}")
 
     # Override config with arguments (only if provided)
     def override(key, value):
@@ -110,44 +122,43 @@ def main():
 
     # Ensure output folder exists
     BASE_DIR = Path(__file__).parent.resolve()
-
     if config.get("OUTPUT_FOLDER") is None:
         config["OUTPUT_FOLDER"] = str(BASE_DIR / "output/output")
-
     output_folder = Path(config["OUTPUT_FOLDER"])
     output_folder.mkdir(parents=True, exist_ok=True)
+    logger.info(f"Output folder set to {output_folder}")
 
     # Load data paths
     rgb_paths, nir_paths, mask_paths = load_paths(config)
-
     if not rgb_paths or not nir_paths or not mask_paths:
-        print("No data to process. Check data folders.")
+        logger.warning("No data to process. Check data folders.")
 
     # Segmentation
     results = create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config)
+    logger.info("Segmentation completed.")
 
     # Data analysis
     display_data(nir_paths, rgb_paths, mask_paths, config)
     channel_histograms(rgb_paths, mask_paths, config)
     best_channels = find_best_channels(rgb_paths, mask_paths, config)
     plot_best_channels(best_channels, config)
+    logger.info("Data analysis completed.")
 
     # Visualization of final masks
     visualize_final_mask(mask_paths, results, config)
-    print(f"File final_masks.pdf was saved in: {config['OUTPUT_FOLDER']}")
+    logger.info(f"File final_masks.pdf was saved in: {config['OUTPUT_FOLDER']}")
 
     # Segmentation metrics
     metrics = evaluate_segmentation(results, mask_paths, config)
     df_metrics = metrics_to_df(metrics)
 
-    print("Segmentation metrics")
-    print(df_metrics)
+    logger.info("Segmentation metrics:\n%s", df_metrics)
     print_average_metrics(df_metrics)
 
     # IoU plots
     plot_iou_histogram(df_metrics, config)
     plot_iou_per_image(df_metrics, config)
-    print(f"IoU plots saved in: {config['OUTPUT_FOLDER']}")
+    logger.info(f"IoU plots saved in: {config['OUTPUT_FOLDER']}")
 
 if __name__ == "__main__":
     main()

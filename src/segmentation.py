@@ -3,19 +3,28 @@ from skimage.io import imread
 from skimage.transform import resize
 from skimage import color
 from skimage.morphology import disk, dilation
+import logging
 
 from .processing import clean_mask, remove_big_objects, adaptive_fp_cleanup
+
+logger = logging.getLogger(__name__)
 
 # Generates segmentation masks by combining red, blue and hue channel thresholds with NIR,
 # performs multiple cleaning operations, and stores intermediate + final masks for analysis
 def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
-    num_images = config["NUM_IMAGES"]
+    num_images = config.get("NUM_IMAGES")
     results = {
         "mask_r_and_nir": [],
         "mask_b_and_nir": [],
         "mask_h_and_nir": [],
         "mask_final": []
     }
+
+    if not rgb_paths:
+        logger.warning("No RGB images provided to create masks.")
+        return results
+
+    logger.info(f"Starting mask creation for {num_images or len(rgb_paths)} images...")
 
     for i, (rgb_path, nir_path, mask_path) in enumerate(zip(rgb_paths, nir_paths, mask_paths)):
         if num_images is not None and i >= num_images:
@@ -37,12 +46,18 @@ def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
         b_threshold = B.mean() + config["B_STD_MULT"]*B.std()
         h_threshold = H_chan.mean() - config["H_STD_MULT"]*H_chan.std()
 
-        mask_r_and_nir = clean_mask((R > r_threshold) & (NIR_resized < nir_threshold), minimum_size=config["R_MIN_SIZE"], selem_close=config["R_SELEM_CLOSE"])
-        mask_b_and_nir = clean_mask((B > b_threshold) & (NIR_resized < nir_threshold), minimum_size=config["B_MIN_SIZE"], selem_close=config["B_SELEM_CLOSE"])
-        mask_h_and_nir = clean_mask((H_chan < h_threshold) & (NIR_resized < nir_threshold), minimum_size=config["H_MIN_SIZE"], selem_close=config["H_SELEM_CLOSE"])
+        mask_r_and_nir = clean_mask((R > r_threshold) & (NIR_resized < nir_threshold),
+                                    minimum_size=config["R_MIN_SIZE"], selem_close=config["R_SELEM_CLOSE"])
+        mask_b_and_nir = clean_mask((B > b_threshold) & (NIR_resized < nir_threshold),
+                                    minimum_size=config["B_MIN_SIZE"], selem_close=config["B_SELEM_CLOSE"])
+        mask_h_and_nir = clean_mask((H_chan < h_threshold) & (NIR_resized < nir_threshold),
+                                    minimum_size=config["H_MIN_SIZE"], selem_close=config["H_SELEM_CLOSE"])
 
         h_black_ratio = 1.0 - (mask_h_and_nir.sum() / mask_h_and_nir.size)
         use_h = h_black_ratio < config["H_BLACK_RATIO"]
+
+        if not use_h:
+            logger.debug(f"Image {i+1}: H channel ignored (black ratio {h_black_ratio:.3f})")
 
         mask_r_b = mask_r_and_nir & mask_b_and_nir
         mask_r_b = dilation(mask_r_b, disk(2))
@@ -63,4 +78,8 @@ def create_mask_r_and_b_minus_h(rgb_paths, nir_paths, mask_paths, config):
         results["mask_h_and_nir"].append(mask_h_and_nir)
         results["mask_final"].append(mask_final)
 
+        if (i + 1) % 10 == 0 or (i + 1) == (num_images or len(rgb_paths)):
+            logger.info(f"Processed {i + 1}/{num_images or len(rgb_paths)} images.")
+
+    logger.info("Mask creation completed.")
     return results

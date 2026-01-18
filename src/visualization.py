@@ -2,11 +2,14 @@ import matplotlib.pyplot as plt
 from skimage.io import imread
 from pathlib import Path
 from matplotlib.backends.backend_pdf import PdfPages
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Visualizes intermediate and final segmentation masks along with ground truth,
 # and saves all images into a multipage PDF file
 def visualize_final_mask(mask_paths, results, config):
-    num_images = config["NUM_IMAGES"]
+    num_images = config.get("NUM_IMAGES")
     if num_images is None:
         num_images = len(mask_paths)
 
@@ -15,8 +18,14 @@ def visualize_final_mask(mask_paths, results, config):
 
     filename = output_folder / "final_masks.pdf"
 
-    total_available = len(results["mask_final"])
+    total_available = len(results.get("mask_final", []))
     num_images = min(num_images, total_available)
+
+    if num_images == 0:
+        logger.warning("No masks available to visualize.")
+        return
+
+    logger.info(f"Saving final masks PDF for {num_images} images to {filename}")
 
     with PdfPages(filename) as pdf:
         for i in range(num_images):
@@ -45,3 +54,5 @@ def visualize_final_mask(mask_paths, results, config):
 
             pdf.savefig(fig)
             plt.close(fig)
+
+    logger.info(f"PDF saved successfully: {filename}")
