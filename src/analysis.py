@@ -124,7 +124,19 @@ def channel_histograms(rgb_paths, mask_paths, config):
 
 # Finds which channel provides the strongest separation between tree mask and background
 def find_best_channels(rgb_paths, mask_paths, config):
-    num_images = config.get("NUM_IMAGES") or len(rgb_paths)
+    num_images_requested = config.get("NUM_IMAGES")
+    total_available = min(len(rgb_paths), len(mask_paths))
+
+    if num_images_requested is None:
+        num_images = total_available
+    else:
+        if num_images_requested > total_available:
+            logger.warning(
+                f"Requested number of images ({num_images_requested}) exceeds available images ({total_available}). "
+                f"Processing {total_available} images instead."
+            )
+        num_images = min(num_images_requested, total_available)
+
     channels_names = ["R", "G", "B", "H","S", "V"]
     best_channel_counts = {name:0 for name in channels_names}
 
