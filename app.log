@@ -1,0 +1,29 @@
+2026-01-18 17:50:47,135 [INFO] Configuration loaded from config\config_example.yaml
+2026-01-18 17:50:47,136 [INFO] Output folder set to output\output
+2026-01-18 17:50:47,137 [INFO] Starting mask creation for 2 images...
+2026-01-18 17:50:47,517 [INFO] High FP ratio detected (0.786), cleaning mask with strong parameters.
+2026-01-18 17:50:47,718 [INFO] High FP ratio detected (0.660), cleaning mask with strong parameters.
+2026-01-18 17:50:47,718 [INFO] Processed 2/2 images.
+2026-01-18 17:50:47,718 [INFO] Mask creation completed.
+2026-01-18 17:50:47,719 [INFO] Segmentation completed.
+2026-01-18 17:50:47,720 [INFO] Saving example images PDF for 2 images to output\output\data_display.pdf
+2026-01-18 17:50:48,782 [INFO] Example images PDF saved: output\output\data_display.pdf
+2026-01-18 17:50:48,783 [INFO] Saving channel histograms PDF for 2 images to output\output\channel_histograms.pdf
+2026-01-18 17:50:51,628 [INFO] Channel histograms PDF saved: output\output\channel_histograms.pdf
+2026-01-18 17:50:51,703 [INFO] Best channel counts: {'R': 1, 'G': 0, 'B': 0, 'H': 1, 'S': 0, 'V': 0}
+2026-01-18 17:50:51,703 [INFO] Saving best channels PDF to output\output\best_channels.pdf
+2026-01-18 17:50:51,862 [INFO] Best channels PDF saved. Counts: {'R': 1, 'G': 0, 'B': 0, 'H': 1, 'S': 0, 'V': 0}
+2026-01-18 17:50:51,862 [INFO] Data analysis completed.
+2026-01-18 17:50:51,863 [INFO] Saving final masks PDF for 2 images to output\output\final_masks.pdf
+2026-01-18 17:50:52,353 [INFO] PDF saved successfully: output\output\final_masks.pdf
+2026-01-18 17:50:52,354 [INFO] File final_masks.pdf was saved in: output/output/
+2026-01-18 17:50:52,361 [INFO] Segmentation metrics:
+   image_id       iou      dice  precision    recall   tp    fp    fn      tn
+0         0  0.447123  0.894246   0.450627  0.982906  575   701    10  139624
+1         1  0.221438  0.442876   0.387112  0.340982  847  1341  1637  158139
+2026-01-18 17:50:52,398 [INFO] Average metrics across images:
+2026-01-18 17:50:52,399 [INFO]   iou: 0.3343
+2026-01-18 17:50:52,399 [INFO]   dice: 0.6686
+2026-01-18 17:50:52,399 [INFO]   precision: 0.4189
+2026-01-18 17:50:52,399 [INFO]   recall: 0.6619
+2026-01-18 17:50:52,752 [INFO] IoU plots saved in: output/output/
