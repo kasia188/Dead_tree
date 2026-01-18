@@ -91,9 +91,20 @@ def plot_channel_hist(channel, mask_bool, title, config, pdf=None):
 
 # Creates histograms for RGB + HSV channels and saves them to a multipage PDF file
 def channel_histograms(rgb_paths, mask_paths, config):
-    num_images = config.get("NUM_IMAGES") or len(rgb_paths)
+    num_images_requested = config.get("NUM_IMAGES")
+    total_available = min(len(rgb_paths), len(mask_paths))
+    if num_images_requested is None:
+        num_images = total_available
+    else:
+        if num_images_requested > total_available:
+            logger.warning(
+                f"Requested number of images ({num_images_requested}) exceeds available images ({total_available}). "
+                f"Processing {total_available} images instead."
+            )
+        num_images = min(num_images_requested, total_available)
+
     output_file = Path(config["OUTPUT_FOLDER"]) / "channel_histograms.pdf"
-    logger.info(f"Saving channel histograms PDF for {num_images} images to {output_file}")
+    logger.info(f"Saving channel histograms PDF for {num_images_requested} images to {output_file}")
 
     with PdfPages(output_file) as pdf:
         for i in range(num_images):
